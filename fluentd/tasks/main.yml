@@ -1,0 +1,48 @@
+# - name: Services directory
+#   ansible.builtin.file:
+#     path: /root/services/
+#     state: directory
+#     mode: '744'
+
+# - name: Copy fluentd
+#   ansible.builtin.copy:
+#     src: fluentd
+#     dest: /root/services/
+#     owner: root
+#     group: root
+#     mode: '744'
+
+# - name: Build fluentd image
+#   community.docker.docker_image:
+#     name: fluentd:g2latest
+#     build:
+#       path: /root/services/fluentd
+#     source: build
+
+- name: Install fluentd
+  community.docker.docker_container:
+    name: fluentd
+    image: fluentd:g2latest
+    restart_policy: unless-stopped
+    recreate: true
+    pull: false
+    env:
+      FLUENTD_CONF: "fluent.conf"
+    networks:
+      - name: web
+        aliases:
+          - fluentd
+    network_mode: bridge
+    exposed_ports: 24224
+    published_ports:
+      - "12345:24224"
+      - "12345:24224/udp"
+    volumes:
+      - "/root/services/fluentd/conf/fluent.conf:/fluentd/etc/fluent.conf"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "web"
+      traefik.http.routers.fluentd.rule: "Host(`fluentd.example.com`)"
+      traefik.http.routers.fluentd.tls.certresolver: "letsencrypt"
+      traefik.http.routers.fluentd.entrypoints: "http,https"
+      traefik.http.services.fluentd.loadbalancer.server.port: "24224"

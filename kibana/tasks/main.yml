@@ -1,0 +1,22 @@
+- name: Install kibana
+  community.docker.docker_container:
+    name: kibana
+    image: docker.elastic.co/kibana/kibana:7.13.1
+    restart_policy: unless-stopped
+    recreate: true
+    pull: true
+    network_mode: bridge
+    exposed_ports: 5601
+    published_ports:
+      - "127.0.0.1:5601:5601"
+    networks:
+      - name: web
+    env:
+      ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: "web"
+      traefik.http.routers.kibana.rule: "Host(`kibana.example.com`)"
+      traefik.http.routers.kibana.tls.certresolver: "letsencrypt"
+      traefik.http.routers.kibana.entrypoints: "http,https"
+      traefik.http.services.kibana.loadbalancer.server.port: "5601"

@@ -1,0 +1,10 @@
+- hosts: main
+  roles:
+    # - essentials
+    # - swap
+    # - docker
+    # - elasticsearch
+    - fluentd
+    # - traefik
+    # - kibana
+    # - reboot
