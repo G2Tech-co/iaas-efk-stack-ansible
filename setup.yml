@@ -1,10 +1,10 @@
 - hosts: main
   roles:
-    # - essentials
-    # - swap
-    # - docker
-    # - elasticsearch
+    - essentials
+    - swap
+    - docker
+    - elasticsearch
     - fluentd
-    # - traefik
-    # - kibana
-    # - reboot
+    - traefik
+    - kibana
+    - reboot
