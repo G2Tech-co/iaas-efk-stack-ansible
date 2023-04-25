@@ -2,6 +2,7 @@
 
 [Ansible doc](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 [fluentd doc](https://docs.fluentd.org/container-deployment/docker-compose)
+[kibana doc](https://x-team.com/blog/improve-your-logging-process/)
 
 ## Roles
 - [x] Essentials
